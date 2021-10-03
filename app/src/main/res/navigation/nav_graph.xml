@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeView">
+
+    <fragment
+        android:id="@+id/homeView"
+        android:name="com.muktadir.imagelibrary.views.home.HomeView"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeView_to_imageView"
+            app:destination="@id/imageView" />
+        <action
+            android:id="@+id/action_homeView_to_listImageView"
+            app:destination="@id/listImageView" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageView"
+        android:name="com.muktadir.imagelibrary.views.image.ImageView"
+        android:label="fragment_image_view"
+        tools:layout="@layout/fragment_image_view" >
+        <action
+            android:id="@+id/action_imageView_to_editImageView"
+            app:destination="@id/editImageView" />
+    </fragment>
+    <fragment
+        android:id="@+id/editImageView"
+        android:name="com.muktadir.imagelibrary.views.image.edit.EditImageView"
+        android:label="fragment_edit_image_view"
+        tools:layout="@layout/fragment_edit_image_view" />
+    <fragment
+        android:id="@+id/listImageView"
+        android:name="com.muktadir.imagelibrary.views.image.ListImageView"
+        android:label="fragment_list_image_view"
+        tools:layout="@layout/fragment_list_image_view" >
+        <action
+            android:id="@+id/action_listImageView_to_editImageView2"
+            app:destination="@id/editImageView" />
+    </fragment>
+</navigation>

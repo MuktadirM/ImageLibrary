@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Image Library</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="single_image">Single image</string>
+    <string name="title">Title</string>
+    <string name="last_edit">Last Edit : 1 Days ago</string>
+</resources>

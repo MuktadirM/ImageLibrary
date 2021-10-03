@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:id="@+id/shareEdit">
+        <item android:id="@+id/discard"
+            android:icon="@drawable/ic_baseline_undo_24"
+            android:title="Discard"
+            app:showAsAction="ifRoom"
+            />
+        <item android:id="@+id/save"
+            android:icon="@drawable/ic_baseline_save_alt_24"
+            android:title="Save"
+            app:showAsAction="ifRoom"
+            />
+    </group>
+</menu>
