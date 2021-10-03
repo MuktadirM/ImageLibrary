@@ -21,21 +21,57 @@
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_weight="50"
-            android:foreground="@color/teal_200"
             android:layout_margin="2dp"
             app:cardCornerRadius="10dp"
             >
-
+            <ImageView
+                android:id="@+id/lastEditUnSaveImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:src="@drawable/ic_baseline_person_24"
+                android:contentDescription="@string/last_edit"
+                />
+            <TextView
+                android:id="@+id/titleUnSaveTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Last Edit : 1 days ago"
+                android:layout_gravity="bottom"
+                android:padding="5dp"
+                />
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
             android:id="@+id/list_item"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_weight="50"
-            android:foreground="@color/teal_700"
             android:layout_margin="2dp"
             app:cardCornerRadius="10dp"
             >
+            <ImageView
+                android:id="@+id/allEditedImageViewLayerOne"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:src="@drawable/ic_baseline_person_24"
+                android:contentDescription="@string/last_edit"
+                android:rotation="5"
+                />
+            <ImageView
+                android:id="@+id/allEditedImageLayerTwo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:src="@drawable/ic_baseline_person_24"
+                android:contentDescription="@string/last_edit"
+                android:rotation="10"
+                />
+            <TextView
+                android:id="@+id/imageCountTxt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="3 Images"
+                android:layout_gravity="bottom"
+                android:padding="5dp"
+                />
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 
@@ -43,8 +79,60 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_alignParentBottom="true"
-        android:foreground="@color/teal_200"
         >
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <androidx.cardview.widget.CardView
+                android:layout_width="260dp"
+                android:layout_height="240dp"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                >
+                <ImageView
+                    android:id="@+id/noImageView"
+                    android:layout_width="260dp"
+                    android:layout_height="230dp"
+                    android:contentDescription="@string/last_edit"
+                    tools:src="@drawable/ic_baseline_person_24"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:text="@string/no_image"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    />
+            </androidx.cardview.widget.CardView>
+            <ImageView
+                android:id="@+id/selectedImageView"
+                android:layout_width="260dp"
+                android:layout_height="230dp"
+                android:contentDescription="@string/last_edit"
+                tools:src="@drawable/ic_baseline_person_24"
+                android:layout_gravity="center"
+                />
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/selectImageFromBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pick Image From Gallery"
+                    />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/editImageBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Edit Image"
+                    android:visibility="gone"
+                    />
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </RelativeLayout>

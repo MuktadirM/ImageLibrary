@@ -22,10 +22,6 @@ public class ListImageView extends DaggerFragment {
     private static final String TAG = "onCreate";
     private FragmentListImageViewBinding binding;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public ListImageView() {
         // Required empty public constructor
     }

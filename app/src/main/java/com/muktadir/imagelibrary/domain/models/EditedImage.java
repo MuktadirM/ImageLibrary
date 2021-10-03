@@ -1,22 +1,30 @@
 package com.muktadir.imagelibrary.domain.models;
 
+import static com.muktadir.imagelibrary.utils.Constrains.humanDiff;
+
 import android.net.Uri;
 
 import java.time.LocalDateTime;
 
 public class EditedImage {
-    private String id;
+    private int id;
+    private String title;
     private Uri uri;
     private LocalDateTime createdAt;
 
-    public EditedImage(String id, Uri uri, LocalDateTime createdAt) {
+    public EditedImage(int id, String title, Uri uri, LocalDateTime createdAt) {
         this.id = id;
+        this.title = title;
         this.uri = uri;
         this.createdAt = createdAt;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public Uri getUri() {
@@ -25,5 +33,9 @@ public class EditedImage {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public String diffForHuman(){
+        return humanDiff(this.createdAt);
     }
 }
