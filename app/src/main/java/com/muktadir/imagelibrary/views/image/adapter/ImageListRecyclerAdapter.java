@@ -17,9 +17,9 @@ import java.util.List;
 
 public class ImageListRecyclerAdapter extends RecyclerView.Adapter<ImageListRecyclerAdapter.ViewHolder> {
     private SingleImageItemBinding binding;
-    private Context context;
-    private ItemOnClick<EditedImage> onClick;
-    private List<EditedImage> list;
+    private final Context context;
+    private final ItemOnClick<EditedImage> onClick;
+    private final List<EditedImage> list;
 
     public ImageListRecyclerAdapter(Context context, ItemOnClick<EditedImage> onClick, List<EditedImage> list) {
         this.context = context;
@@ -52,8 +52,8 @@ public class ImageListRecyclerAdapter extends RecyclerView.Adapter<ImageListRecy
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        private SingleImageItemBinding binding;
-        private ItemOnClick<EditedImage> onClick;
+        private final SingleImageItemBinding binding;
+        private final ItemOnClick<EditedImage> onClick;
         public ViewHolder(SingleImageItemBinding binding,ItemOnClick<EditedImage> onClick) {
             super(binding.getRoot());
             this.binding = binding;
