@@ -4,15 +4,15 @@ import static com.muktadir.imagelibrary.utils.Constrains.humanDiff;
 
 import android.net.Uri;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class EditedImage {
     private int id;
     private String title;
     private Uri uri;
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
-    public EditedImage(int id, String title, Uri uri, LocalDateTime createdAt) {
+    public EditedImage(int id, String title, Uri uri, Date createdAt) {
         this.id = id;
         this.title = title;
         this.uri = uri;
@@ -31,7 +31,7 @@ public class EditedImage {
         return uri;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 

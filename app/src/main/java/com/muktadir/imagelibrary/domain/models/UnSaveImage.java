@@ -2,16 +2,16 @@ package com.muktadir.imagelibrary.domain.models;
 
 import androidx.annotation.Nullable;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 public class UnSaveImage {
     private int id;
     private String name;
     private String imagePath;
-    private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
+    private Date createdAt;
+    private Date updateAt;
 
-    public UnSaveImage(int id, String name, String imagePath, LocalDateTime createdAt,LocalDateTime updateAt)
+    public UnSaveImage(int id, String name, String imagePath, Date createdAt,Date updateAt)
     {
         this.id = id;
         this.name = name;
@@ -22,7 +22,7 @@ public class UnSaveImage {
 
     public UnSaveImage copyWith(
             int id,@Nullable String name,@Nullable String imagePath,
-            @Nullable LocalDateTime createdAt,@Nullable LocalDateTime updateAt)
+            @Nullable Date createdAt,@Nullable Date updateAt)
     {
 
         return new UnSaveImage(id==-1?this.id:id,
@@ -43,11 +43,11 @@ public class UnSaveImage {
         return imagePath;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public LocalDateTime getUpdateAt() {
+    public Date getUpdateAt() {
         return updateAt;
     }
 }
