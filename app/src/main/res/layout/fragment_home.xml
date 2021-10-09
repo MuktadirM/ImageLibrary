@@ -18,18 +18,24 @@
         android:paddingTop="20dp"
         >
         <androidx.cardview.widget.CardView
+            android:id="@+id/lastEditedUnSaveCard"
             android:layout_width="0dp"
             android:layout_height="200dp"
             android:layout_weight="50"
             android:layout_margin="2dp"
             app:cardCornerRadius="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             >
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/lastEditUnSaveImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:src="@drawable/ic_baseline_person_24"
                 android:contentDescription="@string/last_edit"
+                android:layout_margin="30dp"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
                 />
             <TextView
                 android:id="@+id/titleUnSaveTxt"
@@ -38,6 +44,7 @@
                 android:text="Last Edit : 1 days ago"
                 android:layout_gravity="bottom"
                 android:padding="5dp"
+                android:layout_marginStart="20dp"
                 />
         </androidx.cardview.widget.CardView>
         <androidx.cardview.widget.CardView
@@ -47,30 +54,30 @@
             android:layout_weight="50"
             android:layout_margin="2dp"
             app:cardCornerRadius="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             >
-            <ImageView
-                android:id="@+id/allEditedImageViewLayerOne"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/allEditedImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:src="@drawable/ic_baseline_person_24"
                 android:contentDescription="@string/last_edit"
-                android:rotation="5"
-                />
-            <ImageView
-                android:id="@+id/allEditedImageLayerTwo"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:src="@drawable/ic_baseline_person_24"
-                android:contentDescription="@string/last_edit"
-                android:rotation="10"
+                android:scaleType="centerCrop"
+                android:layout_margin="30dp"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
                 />
             <TextView
                 android:id="@+id/imageCountTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="3 Images"
-                android:layout_gravity="bottom"
+                tools:text="3 Images"
                 android:padding="5dp"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="20dp"
+                android:layout_below="@+id/allEditedImageView"
+                android:textStyle="bold"
                 />
         </androidx.cardview.widget.CardView>
     </LinearLayout>
@@ -107,13 +114,16 @@
                     android:textAlignment="center"
                     />
             </androidx.cardview.widget.CardView>
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/selectedImageView"
                 android:layout_width="260dp"
                 android:layout_height="230dp"
                 android:contentDescription="@string/last_edit"
                 tools:src="@drawable/ic_baseline_person_24"
                 android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_person_24"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
+                android:scaleType="centerCrop"
                 />
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -123,7 +133,7 @@
                     android:id="@+id/selectImageFromBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Pick Image From Gallery"
+                    android:text="@string/pick_image_from_gallery"
                     />
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/editImageBtn"

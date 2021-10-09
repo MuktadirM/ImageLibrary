@@ -1,4 +1,4 @@
-package com.muktadir.imagelibrary.repository.local.dts;
+package com.muktadir.imagelibrary.repository.local.dto;
 
 import android.net.Uri;
 
@@ -14,14 +14,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class EditedImageDts implements IDataTransferObject<EditedImage, EditedImageEntity> {
+public class EditedImageDto implements IDataTransferObject<EditedImage, EditedImageEntity> {
 
     @Override
     public EditedImageEntity toEntity(EditedImage entity) {
         return new EditedImageEntity(
                 entity.getId(),
-                entity.getUri().toString(),
                 entity.getTitle(),
+                entity.getUri().toString(),
                 entity.getCreatedAt().toString()
         );
     }
@@ -30,8 +30,9 @@ public class EditedImageDts implements IDataTransferObject<EditedImage, EditedIm
     public EditedImage toDomain(EditedImageEntity entity) {
         return new EditedImage(
                 entity.getId(),
-                entity.getTitle(),
                 Uri.parse(entity.getUrl()),
+                false,
+                entity.getTitle(),
                 getDateTime(entity.getCreatedAt())
         );
     }

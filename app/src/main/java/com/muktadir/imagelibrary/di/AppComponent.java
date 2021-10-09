@@ -4,7 +4,7 @@ import android.app.Application;
 
 import com.muktadir.imagelibrary.BaseApplication;
 import com.muktadir.imagelibrary.di.domain.DomainCoreModules;
-import com.muktadir.imagelibrary.di.repository.DtsModule;
+import com.muktadir.imagelibrary.di.repository.DtoModule;
 import com.muktadir.imagelibrary.di.repository.LocalDatabaseModule;
 
 import javax.inject.Singleton;
@@ -22,7 +22,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AppModule.class,
         DomainCoreModules.class,
         LocalDatabaseModule.class,
-        DtsModule.class
+        DtoModule.class
 })
 public interface AppComponent extends AndroidInjector<BaseApplication> {
 

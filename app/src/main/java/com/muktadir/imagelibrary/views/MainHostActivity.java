@@ -1,5 +1,6 @@
 package com.muktadir.imagelibrary.views;
 
+import android.Manifest;
 import android.os.Bundle;
 
 import androidx.navigation.NavController;
@@ -21,6 +22,7 @@ public class MainHostActivity extends BaseActivity {
 
         navHostController = (NavHostFragment)getSupportFragmentManager().findFragmentById(binding.navHostFragment.getId());
         navController = navHostController.getNavController();
+        requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
     @Override
