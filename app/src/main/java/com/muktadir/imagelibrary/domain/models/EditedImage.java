@@ -4,38 +4,37 @@ import static com.muktadir.imagelibrary.utils.Constrains.humanDiff;
 
 import android.net.Uri;
 
+import androidx.annotation.Nullable;
+
 import java.util.Date;
 
-public class EditedImage {
-    private int id;
+public class
+EditedImage extends Image{
     private String title;
-    private Uri uri;
     private Date createdAt;
 
-    public EditedImage(int id, String title, Uri uri, Date createdAt) {
-        this.id = id;
-        this.title = title;
-        this.uri = uri;
-        this.createdAt = createdAt;
-    }
+    public EditedImage(){ super();}
 
-    public int getId() {
-        return id;
+    public EditedImage(int id,Uri uri,boolean isNew, String title, Date createdAt) {
+        super(id, uri, isNew);
+        this.title = title;
+        this.createdAt = createdAt;
     }
 
     public String getTitle() {
         return title;
     }
-
-    public Uri getUri() {
-        return uri;
+    public void setTitle(String title){
+        this.title = title;
     }
-
     public Date getCreatedAt() {
         return createdAt;
     }
-
     public String diffForHuman(){
         return humanDiff(this.createdAt);
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

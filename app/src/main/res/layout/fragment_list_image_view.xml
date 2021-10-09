@@ -8,10 +8,12 @@
     android:background="@color/white">
 
    <androidx.recyclerview.widget.RecyclerView
+       android:id="@+id/imageListRecycler"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        tools:listitem="@layout/single_image_item"
        app:spanCount="2"
        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
        />
+
 </FrameLayout>

@@ -27,4 +27,7 @@ public interface UnSaveImageDao {
 
     @Update
     public void updateOne(UnSaveImageEntity entity);
+
+    @Query("DELETE FROM un_save_images")
+    public void deleteAll();
 }

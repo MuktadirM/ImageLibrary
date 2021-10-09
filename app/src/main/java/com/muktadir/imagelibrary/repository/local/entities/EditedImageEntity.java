@@ -1,12 +1,8 @@
 package com.muktadir.imagelibrary.repository.local.entities;
 
-import android.net.Uri;
-
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import java.time.LocalDateTime;
 
 @Entity(tableName = "edited_images")
 public class EditedImageEntity {

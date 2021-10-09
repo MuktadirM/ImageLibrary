@@ -12,21 +12,17 @@ public class UnSaveImageEntity {
     @ColumnInfo(name = "name")
     private String name;
 
-    @ColumnInfo(name = "image_path")
-    private String imagePath;
+    @ColumnInfo(name = "image_uri")
+    private String uri;
 
     @ColumnInfo(name = "created_at")
     private String createdAt;
 
-    @ColumnInfo(name = "updated_at")
-    private String updateAt;
-
-    public UnSaveImageEntity(int id, String name, String imagePath, String createdAt, String updateAt) {
+    public UnSaveImageEntity(int id, String name, String uri, String createdAt) {
         this.id = id;
         this.name = name;
-        this.imagePath = imagePath;
+        this.uri = uri;
         this.createdAt = createdAt;
-        this.updateAt = updateAt;
     }
 
     public int getId() {
@@ -45,12 +41,12 @@ public class UnSaveImageEntity {
         this.name = name;
     }
 
-    public String getImagePath() {
-        return imagePath;
+    public String getUri() {
+        return uri;
     }
 
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setUri(String imagePath) {
+        this.uri = imagePath;
     }
 
     public String getCreatedAt() {
@@ -61,11 +57,4 @@ public class UnSaveImageEntity {
         this.createdAt = createdAt;
     }
 
-    public String getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(String updateAt) {
-        this.updateAt = updateAt;
-    }
 }

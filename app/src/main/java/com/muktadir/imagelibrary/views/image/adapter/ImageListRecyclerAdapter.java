@@ -13,18 +13,19 @@ import com.muktadir.imagelibrary.databinding.SingleImageItemBinding;
 import com.muktadir.imagelibrary.domain.models.EditedImage;
 import com.muktadir.imagelibrary.utils.ItemOnClick;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImageListRecyclerAdapter extends RecyclerView.Adapter<ImageListRecyclerAdapter.ViewHolder> {
     private SingleImageItemBinding binding;
     private final Context context;
     private final ItemOnClick<EditedImage> onClick;
-    private final List<EditedImage> list;
+    private List<EditedImage> list;
 
-    public ImageListRecyclerAdapter(Context context, ItemOnClick<EditedImage> onClick, List<EditedImage> list) {
+    public ImageListRecyclerAdapter(Context context, ItemOnClick<EditedImage> onClick) {
         this.context = context;
         this.onClick = onClick;
-        this.list = list;
+        this.list = new ArrayList<>();
     }
 
     @NonNull
@@ -49,6 +50,11 @@ public class ImageListRecyclerAdapter extends RecyclerView.Adapter<ImageListRecy
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void setEditedImages(List<EditedImage> list)
+    {
+        this.list = list;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

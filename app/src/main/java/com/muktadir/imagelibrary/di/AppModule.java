@@ -37,7 +37,7 @@ public class AppModule {
     @Singleton
     @Provides
     static LocalDatabase provideLocalDatabase(Application application){
-        return Room.databaseBuilder(application,LocalDatabase.class,DATABASE_NAME).build();
+        return Room.databaseBuilder(application,LocalDatabase.class,DATABASE_NAME).allowMainThreadQueries().build();
     }
 
 }

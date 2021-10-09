@@ -11,7 +11,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
         app:cardCornerRadius="10dp">
 
@@ -34,7 +34,9 @@
                 android:padding="5dp"
                 android:textSize="17sp"
                 android:layout_gravity="start"
-                android:text="@string/title" />
+                android:text="@{`Name : `+image.title}"
+                tools:text="Title"
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -42,7 +44,7 @@
                 android:padding="5dp"
                 android:textSize="17sp"
                 android:layout_gravity="start"
-                android:text="@{image.title}"
+                android:text="@{`Last Edit : `+image.diffForHuman()}"
                 tools:text="@string/last_edit"
                 />
         </LinearLayout>
