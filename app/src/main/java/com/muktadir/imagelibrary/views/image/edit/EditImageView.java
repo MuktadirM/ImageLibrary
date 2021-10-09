@@ -11,6 +11,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -46,6 +47,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.ChangeBounds;
 import androidx.transition.TransitionManager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.muktadir.imagelibrary.R;
@@ -114,6 +119,8 @@ public class EditImageView extends DaggerFragment implements OnPhotoEditorListen
     @Nullable
     @VisibleForTesting
     Uri mSaveImageUri;
+
+    Uri saveImageUri;
 
     PhotoEditor mPhotoEditor;
     private PhotoEditorView mPhotoEditorView;
@@ -205,8 +212,6 @@ public class EditImageView extends DaggerFragment implements OnPhotoEditorListen
 
         binding.imgUndo.setOnClickListener(this);
         binding.imgRedo.setOnClickListener(this);
-        binding.imgCamera.setOnClickListener(this);
-        binding.imgGallery.setOnClickListener(this);
         binding.imgSave.setOnClickListener(this);
         binding.imgClose.setOnClickListener(this);
         binding.imgShare.setOnClickListener(this);
@@ -274,87 +279,8 @@ public class EditImageView extends DaggerFragment implements OnPhotoEditorListen
             case R.id.imgShare:
                 shareImage();
                 break;
-
-            case R.id.imgCamera:
-                openCameraForImage();
-                break;
-
-            case R.id.imgGallery:
-                pickImage();
-                break;
         }
     }
-
-    private void pickImage() {
-
-        String[] mimeTypes =
-                {"image/*"};
-
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-
-        intent.setType(mimeTypes[0]);
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-        imagePickActivityResultLauncher.launch(Intent.createChooser(intent, "Pick an image"));
-    }
-
-
-    private String getFileExtension(Uri uri) {
-        if(getActivity() == null){
-            return "";
-        }
-        ContentResolver FileEXT =  getActivity().getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(FileEXT.getType(uri));
-
-    }
-
-    ActivityResultLauncher<Intent> imagePickActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // There are no request codes
-                        Intent data = result.getData();
-
-                        if (data == null) {
-                            //Display an error msg in ui
-                            return;
-                        }
-                        try {
-                            Uri fileReceived = data.getData();
-                            mPhotoEditor.clearAllViews();
-                            Bitmap photo = MediaStore.Images.Media.getBitmap(requireContext().getContentResolver() , fileReceived);
-                            mPhotoEditorView.getSource().setImageBitmap(photo);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
-            });
-
-    public void openCameraForImage() {
-        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra("REQUEST_CODE",CAMERA_REQUEST);
-        launchSomeActivity.launch(intent);
-    }
-
-    ActivityResultLauncher<Intent> launchSomeActivity = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-                    if(data != null){
-                        mPhotoEditor.clearAllViews();
-                        Bitmap photo = (Bitmap) data.getExtras().get("data");
-                        mPhotoEditorView.getSource().setImageBitmap(photo);
-                    }else {
-                        Log.i(TAG, "image: no image");
-                    }
-                }
-            });
 
     @Override
     public void onColorChanged(int colorCode) {
@@ -521,8 +447,9 @@ public class EditImageView extends DaggerFragment implements OnPhotoEditorListen
                             showSnackBar("Image Saved Successfully");
                             mSaveImageUri = uri;
                             mPhotoEditorView.getSource().setImageURI(mSaveImageUri);
+                            saveImageUri = Uri.parse("file:"+imagePath);
                             EditedImage editedImage = new EditedImage();
-                            editedImage.setUri(Uri.parse("file:"+imagePath));
+                            editedImage.setUri(saveImageUri);
                             editedImage.setTitle(new File(editedImage.getUri().getPath()).getName());
                             viewModel.saveImage(editedImage);
                         }
@@ -545,15 +472,11 @@ public class EditImageView extends DaggerFragment implements OnPhotoEditorListen
     }
 
     private void shareImage() {
-        if (mSaveImageUri == null) {
+        if (saveImageUri == null) {
             showSnackBar(getString(R.string.msg_save_image_to_share));
             return;
         }
-
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_STREAM, buildFileProviderUri(mSaveImageUri));
-        startActivity(Intent.createChooser(intent, getString(R.string.msg_share_image)));
+        shareWithGlide(saveImageUri);
     }
 
     private Uri buildFileProviderUri(@NonNull Uri uri) {
@@ -600,5 +523,31 @@ public class EditImageView extends DaggerFragment implements OnPhotoEditorListen
         } else {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void shareWithGlide(Uri uri){
+        Glide.with(requireContext())
+                .asBitmap()
+                .load(uri)
+                .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        Intent intent = new Intent(Intent.ACTION_SEND);
+                        intent.putExtra(Intent.EXTRA_TEXT, "Hey, this is your edited image");
+                        String path = MediaStore.Images.Media.insertImage(requireContext().getContentResolver(), resource, "", null);
+                        Uri screenshotUri = Uri.parse(path);
+                        intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+                        intent.setType("image/*");
+                        startActivity(Intent.createChooser(intent, "Share image via..."));
+                        File file = new File(screenshotUri.getPath());
+                        boolean del = file.delete();
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                    }
+                });
     }
 }
