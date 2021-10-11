@@ -3,20 +3,14 @@ package com.muktadir.imagelibrary.views.home;
 import static com.muktadir.imagelibrary.utils.Constrains.EDIT_IMAGE;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.MimeTypeMap;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -30,11 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.muktadir.imagelibrary.R;
 import com.muktadir.imagelibrary.databinding.FragmentHomeBinding;
 import com.muktadir.imagelibrary.domain.models.EditedImage;
@@ -42,7 +32,6 @@ import com.muktadir.imagelibrary.domain.models.Image;
 import com.muktadir.imagelibrary.viewModels.ImageViewModel;
 import com.muktadir.imagelibrary.viewModels.ViewModelProviderFactory;
 
-import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -226,52 +215,5 @@ public class HomeView extends DaggerFragment {
                     .into(binding.allEditedImageView);
         }
     }
-
-    public String getMimeType(Context context, Uri uri) {
-        String mimeType = null;
-        if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
-            ContentResolver cr = context.getContentResolver();
-            mimeType = cr.getType(uri);
-        } else {
-            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
-                    .toString());
-            mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    fileExtension.toLowerCase());
-        }
-        return mimeType;
-    }
-
-    private String getFileExtension(Uri uri) {
-        ContentResolver FileEXT =  requireActivity().getContentResolver();
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-        return mime.getExtensionFromMimeType(FileEXT.getType(uri));
-    }
-
-    private void shareWithGlide(Uri uri){
-        Glide.with(requireContext())
-                .asBitmap()
-                .load(uri)
-                .skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        Intent intent = new Intent(Intent.ACTION_SEND);
-                        intent.putExtra(Intent.EXTRA_TEXT, "Hey, this is your edited image");
-                        String path = MediaStore.Images.Media.insertImage(requireContext().getContentResolver(), resource, "", null);
-                        Uri screenshotUri = Uri.parse(path);
-                        intent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
-                        intent.setType("image/*");
-                        startActivity(Intent.createChooser(intent, "Share image via..."));
-                        File file = new File(screenshotUri.getPath());
-                        boolean del = file.delete();
-                    }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });
-    }
-
 
 }
