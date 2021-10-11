@@ -28,6 +28,10 @@
         <action
             android:id="@+id/action_imageView_to_editImageView"
             app:destination="@id/editImageView" />
+        <argument
+            android:name="image"
+            app:argType="com.muktadir.imagelibrary.domain.models.Image"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/editImageView"
@@ -47,5 +51,8 @@
         <action
             android:id="@+id/action_listImageView_to_editImageView2"
             app:destination="@id/editImageView" />
+        <action
+            android:id="@+id/action_listImageView_to_imageView"
+            app:destination="@id/imageView" />
     </fragment>
 </navigation>

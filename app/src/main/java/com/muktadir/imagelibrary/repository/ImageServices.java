@@ -8,7 +8,9 @@ import com.muktadir.imagelibrary.domain.models.EditedImage;
 import com.muktadir.imagelibrary.domain.services.IImageServices;
 import com.muktadir.imagelibrary.repository.local.LocalDatabase;
 import com.muktadir.imagelibrary.repository.local.dto.EditedImageDto;
+import com.muktadir.imagelibrary.repository.local.dto.UnSaveEditedImageDto;
 import com.muktadir.imagelibrary.repository.local.entities.EditedImageEntity;
+import com.muktadir.imagelibrary.repository.local.entities.UnSaveImageEntity;
 import com.muktadir.imagelibrary.utils.Resource;
 
 import java.util.ArrayList;
@@ -26,6 +28,9 @@ public class ImageServices implements IImageServices {
 
     @Inject
     EditedImageDto dto;
+
+    @Inject
+    UnSaveEditedImageDto unSaveDto;
 
     @Inject
     public ImageServices(LocalDatabase localDatabase) {
@@ -87,14 +92,24 @@ public class ImageServices implements IImageServices {
         if(resourceMutableLiveData == null){
             resourceMutableLiveData = new MutableLiveData<>();
         }
-        image.setNew(false);
         image.setCreatedAt(Calendar.getInstance().getTime());
-        EditedImageEntity entity = dto.toEntity(image);
-        try {
-            localDatabase.getEditedImageDao().insertOne(entity);
-            resourceMutableLiveData.postValue(Resource.success(true));
-        } catch (Exception e){
-            resourceMutableLiveData.postValue(Resource.error("Error "+e.getMessage(),null));
+        UnSaveImageEntity entity = unSaveDto.toEntity(image);
+
+        if(image.isNew()){
+            localDatabase.getUnSaveImageDao().deleteAll();
+            try {
+                localDatabase.getUnSaveImageDao().insertOne(entity);
+                resourceMutableLiveData.postValue(Resource.success(true));
+            } catch (Exception e){
+                resourceMutableLiveData.postValue(Resource.error("Error "+e.getMessage(),null));
+            }
+        } else {
+            try {
+                localDatabase.getUnSaveImageDao().updateOne(entity);
+                resourceMutableLiveData.postValue(Resource.success(true));
+            } catch (Exception e){
+                resourceMutableLiveData.postValue(Resource.error("Error "+e.getMessage(),null));
+            }
         }
         return resourceMutableLiveData;
     }
@@ -107,6 +122,14 @@ public class ImageServices implements IImageServices {
             liveDataEditedUnSave = new MutableLiveData<>();
         }
         liveDataEditedUnSave.postValue(Resource.loading(null));
+        try {
+            all = unSaveDto.toDomainList(localDatabase.getUnSaveImageDao().getAll());
+            if(all.size()>0){
+                liveDataEditedUnSave.postValue(Resource.success(all.get(0)));
+            }
+        } catch (Exception e){
+            liveDataEditedUnSave.postValue(Resource.error("Error "+e.getMessage(),null));
+        }
         return liveDataEditedUnSave;
     }
 }

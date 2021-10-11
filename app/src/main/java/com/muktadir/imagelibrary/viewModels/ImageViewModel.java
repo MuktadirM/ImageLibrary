@@ -27,4 +27,17 @@ public class ImageViewModel extends ViewModel {
         return services.getAllEditedImages();
     }
 
+    public LiveData<Resource<Boolean>> lastEdit(EditedImage image){
+        return services.saveWork(image);
+    }
+
+    public LiveData<Resource<EditedImage>> getLastWork(){
+        return services.getUnSaveWork();
+    }
+
+    public LiveData<Resource<Boolean>> deleteImage(EditedImage image){
+        return services.delete(image);
+    }
+
+
 }

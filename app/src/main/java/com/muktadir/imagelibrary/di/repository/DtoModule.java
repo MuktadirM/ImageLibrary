@@ -1,6 +1,7 @@
 package com.muktadir.imagelibrary.di.repository;
 
 import com.muktadir.imagelibrary.repository.local.dto.EditedImageDto;
+import com.muktadir.imagelibrary.repository.local.dto.UnSaveEditedImageDto;
 
 import javax.inject.Singleton;
 
@@ -14,5 +15,12 @@ public class DtoModule {
     static EditedImageDto provideEditedImageDts(){
         return new EditedImageDto();
     }
+
+    @Singleton
+    @Provides
+    static UnSaveEditedImageDto provideUnSaveEditedImageDts(){
+        return new UnSaveEditedImageDto();
+    }
+
 
 }

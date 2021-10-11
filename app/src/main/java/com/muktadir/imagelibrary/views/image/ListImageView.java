@@ -1,5 +1,7 @@
 package com.muktadir.imagelibrary.views.image;
 
+import static com.muktadir.imagelibrary.utils.Constrains.VIEW_IMAGE;
+
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -24,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -32,6 +35,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.muktadir.imagelibrary.R;
 import com.muktadir.imagelibrary.databinding.FragmentListImageViewBinding;
 import com.muktadir.imagelibrary.domain.models.EditedImage;
+import com.muktadir.imagelibrary.domain.models.Image;
 import com.muktadir.imagelibrary.utils.ItemOnClick;
 import com.muktadir.imagelibrary.viewModels.ImageViewModel;
 import com.muktadir.imagelibrary.viewModels.ViewModelProviderFactory;
@@ -56,6 +60,7 @@ public class ListImageView extends DaggerFragment implements ItemOnClick<EditedI
     private ImageListRecyclerAdapter adapter;
     private ImageViewModel viewModel;
     private NavController navController;
+    private List<EditedImage> editedImageList;
 
     @Inject
     ViewModelProviderFactory providerFactory;
@@ -95,7 +100,8 @@ public class ListImageView extends DaggerFragment implements ItemOnClick<EditedI
                 switch (listResource.status){
                     case SUCCESS:
                         if(listResource.data != null){
-                            adapter.setEditedImages(listResource.data);
+                            editedImageList = listResource.data;
+                            adapter.setEditedImages(editedImageList);
                             adapter.notifyDataSetChanged();
                         }
                         break;
@@ -157,7 +163,48 @@ public class ListImageView extends DaggerFragment implements ItemOnClick<EditedI
 
     @Override
     public void ItemClicked(EditedImage item, int position) {
-       // shareWithGlide(Uri uri);
+        Bundle bundle = new Bundle();
+        Image image = new Image();
+        image.setNew(false);
+        image.setUri(item.getUri());
+        image.setId(item.getId());
+        bundle.putParcelable(VIEW_IMAGE,image);
+        navController.navigate(R.id.action_listImageView_to_imageView,bundle);
+    }
+
+    @Override
+    public void ShareImage(EditedImage item) {
+        shareWithGlide(item.getUri());
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void DeleteImage(EditedImage item, int position) {
+        viewModel.deleteImage(item).observe(getViewLifecycleOwner(),(booleanResource -> {
+            if(booleanResource != null){
+                switch (booleanResource.status){
+                    case SUCCESS:
+                        editedImageList.remove(item);
+                        adapter.notifyDataSetChanged();
+                        deleteFromStorage(item.getUri());
+                        break;
+                    case ERROR:
+                        showToastMessage("Sorry "+booleanResource.message);
+                        break;
+                    case LOADING:
+                        showToastMessage("Please wait..");
+                        break;
+                }
+            }
+        }));
+    }
+
+    private void deleteFromStorage(Uri uri){
+        File file = new File(uri.getPath());
+        boolean result = file.delete();
+        if(result){
+            showToastMessage("Image Deleted");
+        }
     }
 
     private void shareWithGlide(Uri uri){
@@ -184,5 +231,8 @@ public class ListImageView extends DaggerFragment implements ItemOnClick<EditedI
 
                     }
                 });
+    }
+    private void showToastMessage(String msg){
+        Toast.makeText(requireContext(),msg,Toast.LENGTH_SHORT).show();
     }
 }

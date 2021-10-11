@@ -9,8 +9,9 @@ public class UnSaveImageEntity {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     private int id;
-    @ColumnInfo(name = "name")
-    private String name;
+
+    @ColumnInfo(name = "title")
+    private String title;
 
     @ColumnInfo(name = "image_uri")
     private String uri;
@@ -18,9 +19,9 @@ public class UnSaveImageEntity {
     @ColumnInfo(name = "created_at")
     private String createdAt;
 
-    public UnSaveImageEntity(int id, String name, String uri, String createdAt) {
+    public UnSaveImageEntity(int id, String title, String uri, String createdAt) {
         this.id = id;
-        this.name = name;
+        this.title = title;
         this.uri = uri;
         this.createdAt = createdAt;
     }
@@ -33,12 +34,12 @@ public class UnSaveImageEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getUri() {

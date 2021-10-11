@@ -38,8 +38,15 @@ public class ImageListRecyclerAdapter extends RecyclerView.Adapter<ImageListRecy
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.binding.setImage(list.get(position));
-        Glide.with(context).load(list.get(position).getUri()).into(holder.binding.imageView);
+        EditedImage image = list.get(position);
+        holder.binding.setImage(image);
+        Glide.with(context).load(image.getUri()).into(holder.binding.imageView);
+        binding.deleteImage.setOnClickListener((v)->{
+            holder.onClick.DeleteImage(image,position);
+        });
+        binding.shareImage.setOnClickListener((v)->{
+            holder.onClick.ShareImage(image);
+        });
     }
 
     /**

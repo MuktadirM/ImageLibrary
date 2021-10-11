@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.MimeTypeMap;
 
 import androidx.activity.result.ActivityResult;
@@ -25,8 +26,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -44,8 +43,6 @@ import com.muktadir.imagelibrary.viewModels.ImageViewModel;
 import com.muktadir.imagelibrary.viewModels.ViewModelProviderFactory;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -53,7 +50,7 @@ import javax.inject.Inject;
 import dagger.android.support.DaggerFragment;
 
 /**
- * A simple {@link Fragment} subclass.
+ * A simple {@link DaggerFragment} subclass.
  */
 public class HomeView extends DaggerFragment {
     private ImageViewModel viewModel;
@@ -84,16 +81,16 @@ public class HomeView extends DaggerFragment {
                              Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater,container,false);
        ActionBar actionBar = ((AppCompatActivity)requireActivity()).getSupportActionBar();
-        if(actionBar != null){
+       if(actionBar != null){
            actionBar.hide();
-        }
+           exitFullscreen();
+       }
         return binding.getRoot();
     }
 
-    private void checkPermission(){
-        Uri imageCollection = MediaStore.Images.Media
-                .getContentUri(requireContext().getExternalCacheDir().getAbsolutePath());
-
+    private void exitFullscreen(){
+        requireActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN); // Disable fullscreen mode
     }
 
     @Override
@@ -128,7 +125,6 @@ public class HomeView extends DaggerFragment {
                      case SUCCESS:
                             if(listResource.data != null){
                                 loadImage(listResource.data);
-                                Log.d(TAG, "onViewCreated: "+listResource.data.get(0).getUri());
                             }
                          break;
                      case ERROR:
@@ -140,6 +136,32 @@ public class HomeView extends DaggerFragment {
                  }
              }
          }));
+
+         viewModel.getLastWork().removeObservers(this);
+         viewModel.getLastWork().observe(getViewLifecycleOwner(),(editedImageResource -> {
+             if(editedImageResource != null){
+                 switch (editedImageResource.status){
+                     case SUCCESS:
+                         if(editedImageResource.data != null){
+                             loadLastWork(editedImageResource.data);
+                         }
+                         break;
+                     case ERROR:
+                         Log.d(TAG, "onViewCreated: "+editedImageResource.message);
+                         break;
+                     case LOADING:
+                         Log.d(TAG, "onViewCreated: Loading Last work....");
+                         break;
+                 }
+             }
+         }));
+    }
+
+    private void loadLastWork(EditedImage data) {
+        requestManager.load(data.getUri()).into(binding.lastEditUnSaveImageView);
+        String title ="Modified "+ data.diffForHuman();
+        binding.titleUnSaveTxt.setText(title);
+        Log.d(TAG, "loadLastWork: "+data.getUri());
     }
 
     private void hidePickButton(){
@@ -194,7 +216,6 @@ public class HomeView extends DaggerFragment {
 
 
     private void loadImage(List<EditedImage> list){
-        Log.d(TAG, "loadImage: "+list.get(0).getUri().toString());
         String txt = "No Image";
         binding.imageCountTxt.setText(txt);
         if (list.size()>0) {

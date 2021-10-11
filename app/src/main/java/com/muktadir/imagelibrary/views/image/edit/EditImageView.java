@@ -84,6 +84,7 @@ import com.muktadir.photoeditor.utils.ViewType;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -194,6 +195,18 @@ public class EditImageView extends DaggerFragment implements OnPhotoEditorListen
         //Set Image Dynamically
         mPhotoEditorView.getSource().setImageURI(image.getUri());
         mSaveFileHelper = new FileSaveHelper((AppCompatActivity) requireActivity());
+        EditedImage editedImage = new EditedImage();
+        if(image.isNew()){
+            editedImage.setNew(true);
+        } else {
+            editedImage.setId(image.getId());
+            editedImage.setNew(false);
+        }
+        editedImage.setUri(image.getUri());
+        editedImage.setTitle(getFileName(image.getUri()));
+        editedImage.setCreatedAt(Calendar.getInstance().getTime());
+        viewModel.lastEdit(editedImage);
+
         return binding.getRoot();
     }
 
@@ -201,6 +214,10 @@ public class EditImageView extends DaggerFragment implements OnPhotoEditorListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         navController = Navigation.findNavController(view);
+    }
+
+    private String getFileName(Uri uri){
+        return new File(uri.getPath()).getName();
     }
 
     private void initViews() {
@@ -450,7 +467,7 @@ public class EditImageView extends DaggerFragment implements OnPhotoEditorListen
                             saveImageUri = Uri.parse("file:"+imagePath);
                             EditedImage editedImage = new EditedImage();
                             editedImage.setUri(saveImageUri);
-                            editedImage.setTitle(new File(editedImage.getUri().getPath()).getName());
+                            editedImage.setTitle(getFileName(editedImage.getUri()));
                             viewModel.saveImage(editedImage);
                         }
 

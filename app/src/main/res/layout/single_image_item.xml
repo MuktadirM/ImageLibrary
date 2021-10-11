@@ -47,6 +47,22 @@
                 android:text="@{`Last Edit : `+image.diffForHuman()}"
                 tools:text="@string/last_edit"
                 />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/shareImage"
+                android:text="Share Image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blackLight"
+                app:cornerRadius="0dp"
+                />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/deleteImage"
+                android:text="Delete Image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/blackLight"
+                app:cornerRadius="0dp"
+                />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>
